@@ -58,16 +58,29 @@ public class SwerveModule {
         return new SwerveModuleState(driveEncoder.getVelocity() * Constants.RPM_TO_MPS, new Rotation2d((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI + angleOffset));
       }
 
-    public double getAngleEncoder() {
-      return Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI);
+    public double getAdjustedAngleEncoder() {
+      if(Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI + angleOffset) > 180) {
+        return Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI + angleOffset) - 360;
+      } else if(Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI + angleOffset) < -180) {
+        return Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI + angleOffset) + 360;
+      } else {
+        return Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI + angleOffset);
+      }
     }
     public void setDesiredState(SwerveModuleState state) {
-        double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity() * Constants.RPM_TO_MPS, state.speedMetersPerSecond);
-        double angleOutput = anglePIDController.calculate((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI + angleOffset, state.angle.getRadians());
 
-        //System.out.println("Module Number: " + angleEncoder.getChannel() + " state.speed: " + state.speedMetersPerSecond + " state.angle: " + state.angle.getDegrees());
+
+
+        double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity() * Constants.RPM_TO_MPS, state.speedMetersPerSecond);
+        double angleOutput = anglePIDController.calculate(Math.toRadians(getAdjustedAngleEncoder()), state.angle.getRadians());
+
+        System.out.println("Module Number: " + angleEncoder.getChannel() + " state.speed: " + state.speedMetersPerSecond + " state.angle: " + state.angle.getDegrees());
         //System.out.println("Module Number: " + angleEncoder.getChannel() + " driveOutput: " + driveOutput + " angleOutput: " + angleOutput);
         //SmartDashboard.putNumber("Module Number: " + angleEncoder.getChannel(), Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI));
+        
+        SmartDashboard.putNumber("Module Number " + angleEncoder.getChannel() + " set angle", state.angle.getDegrees());
+        
+        
         driveMotor.set(driveOutput);
         angleMotor.set(angleOutput);
     }

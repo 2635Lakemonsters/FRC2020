@@ -35,10 +35,8 @@ public class DriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrainSubsystem.updateOdometry();
-    
-    double left1 = leftStick.getRawAxis(1);
-    double left0 = leftStick.getRawAxis(0);
+    double left1 = -leftStick.getRawAxis(1);
+    double left0 = -leftStick.getRawAxis(0);
     double right0 = rightStick.getRawAxis(0);
 
     if(Math.abs(left1) < 0.05){
@@ -50,7 +48,6 @@ public class DriveCommand extends CommandBase {
     if(Math.abs(right0) < 0.05){
       right0 = 0;
     }
-
 
     drivetrainSubsystem.drive(left1, left0, right0, false);
   }

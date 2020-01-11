@@ -52,12 +52,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
       System.out.println("resetting navX");
       navX.reset();
     }
-
+     
   }
   
   public Rotation2d getAngle() {
     if (navX != null) {
-      System.out.println(navX.getAngle());
+      //System.out.println(navX.getAngle());
       SmartDashboard.putNumber("navX Angle: ", navX.getAngle());
       return Rotation2d.fromDegrees(navX.getAngle());
     } else {
@@ -86,10 +86,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
   }
 
   public void dashboardAngleEncoders() {
-      SmartDashboard.putNumber("Front Left", frontLeftModule.getAngleEncoder());
-      SmartDashboard.putNumber("Front Right", frontRightModule.getAngleEncoder());
-      SmartDashboard.putNumber("Rear Left", rearLeftModule.getAngleEncoder());
-      SmartDashboard.putNumber("Rear Right", rearRightModule.getAngleEncoder());
+      SmartDashboard.putNumber("Front Left", frontLeftModule.getAdjustedAngleEncoder());
+      SmartDashboard.putNumber("Front Right", frontRightModule.getAdjustedAngleEncoder());
+      SmartDashboard.putNumber("Rear Left", rearLeftModule.getAdjustedAngleEncoder());
+      SmartDashboard.putNumber("Rear Right", rearRightModule.getAdjustedAngleEncoder());
     }
   public void updateOdometry() {
     odometry.update(
@@ -104,5 +104,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    updateOdometry();
   }
 }
