@@ -38,7 +38,7 @@ public class SwerveModule {
 
     PIDController drivePIDController = new PIDController(0.5,0,0);
 
-    ProfiledPIDController anglePIDController = new ProfiledPIDController(0.1, 0, 0,
+    ProfiledPIDController anglePIDController = new ProfiledPIDController(0.5, 0, 0,
       new TrapezoidProfile.Constraints(Constants.SWERVE_MAX_ANGULAR_VELOCITY, Constants.SWERVE_MAX_ANGULAR_ACCELERATION));
 
     public SwerveModule(int driveMotorChannel, int angleMotorChannel, int angleEncoderChannel, double angleOffset) {
@@ -67,14 +67,28 @@ public class SwerveModule {
         return Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI + angleOffset);
       }
     }
+    
     public void setDesiredState(SwerveModuleState state) {
+        double setSpeed = state.speedMetersPerSecond;
+        double setAngle = state.angle.getDegrees();
+
+
 
 
 
         double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity() * Constants.RPM_TO_MPS, state.speedMetersPerSecond);
-        double angleOutput = anglePIDController.calculate(Math.toRadians(getAdjustedAngleEncoder()), state.angle.getRadians());
+        double angleOutput = anglePIDController.calculate(Math.toRadians(getAdjustedAngleEncoder()), Math.toRadians(setAngle));
 
-        System.out.println("Module Number: " + angleEncoder.getChannel() + " state.speed: " + state.speedMetersPerSecond + " state.angle: " + state.angle.getDegrees());
+        if(angleEncoder.getChannel() == 0) {
+          double angle = state.angle.getDegrees(), pos = getAdjustedAngleEncoder(), err = Math.toDegrees(anglePIDController.getPositionError());
+          if ((angle - pos) - err > 0.001)
+          {
+            int i=0;
+          }
+          System.out.println("Angle: " + getAdjustedAngleEncoder() + " Setpoint: " + state.angle.getDegrees() + " Error: " + Math.toDegrees(anglePIDController.getPositionError()));
+        }
+
+        //System.out.println("Module Number: " + angleEncoder.getChannel() + " state.speed: " + state.speedMetersPerSecond + " state.angle: " + state.angle.getDegrees());
         //System.out.println("Module Number: " + angleEncoder.getChannel() + " driveOutput: " + driveOutput + " angleOutput: " + angleOutput);
         //SmartDashboard.putNumber("Module Number: " + angleEncoder.getChannel(), Math.toDegrees((1.0 - angleEncoder.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI));
         

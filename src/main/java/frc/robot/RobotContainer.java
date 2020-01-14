@@ -30,7 +30,7 @@ public class RobotContainer {
 
   public static DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   public final DriveCommand driveCommand = new DriveCommand(leftStick, rightStick, drivetrainSubsystem);
-
+  public final DriveTest driveTest = new DriveTest(drivetrainSubsystem);
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
