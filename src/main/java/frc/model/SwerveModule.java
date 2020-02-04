@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.RobotController;
@@ -34,6 +35,7 @@ public class SwerveModule {
     CANEncoder driveEncoder;
     AnalogInput angleEncoder;
 
+    
     double angleOffset = 0.0;
 
     PIDController drivePIDController = new PIDController(0.5,0,0);
@@ -47,10 +49,9 @@ public class SwerveModule {
 
         driveEncoder = new CANEncoder(driveMotor);
         angleEncoder = new AnalogInput(angleEncoderChannel);
-        
-
+      
         this.angleOffset = angleOffset;
-
+        
         anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
@@ -79,14 +80,14 @@ public class SwerveModule {
         double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity() * Constants.RPM_TO_MPS, state.speedMetersPerSecond);
         double angleOutput = anglePIDController.calculate(Math.toRadians(getAdjustedAngleEncoder()), Math.toRadians(setAngle));
 
-        if(angleEncoder.getChannel() == 0) {
-          double angle = state.angle.getDegrees(), pos = getAdjustedAngleEncoder(), err = Math.toDegrees(anglePIDController.getPositionError());
-          if ((angle - pos) - err > 0.001)
-          {
-            int i=0;
-          }
-          System.out.println("Angle: " + getAdjustedAngleEncoder() + " Setpoint: " + state.angle.getDegrees() + " Error: " + Math.toDegrees(anglePIDController.getPositionError()));
-        }
+        // if(angleEncoder.getChannel() == 0) {
+        //   double angle = state.angle.getDegrees(), pos = getAdjustedAngleEncoder(), err = Math.toDegrees(anglePIDController.getPositionError());
+        //   if ((angle - pos) - err > 0.001)
+        //   {
+        //     int i=0;
+        //   }
+        //   System.out.println("Angle: " + getAdjustedAngleEncoder() + " Setpoint: " + state.angle.getDegrees() + " Error: " + Math.toDegrees(anglePIDController.getPositionError()));
+        // }
 
         //System.out.println("Module Number: " + angleEncoder.getChannel() + " state.speed: " + state.speedMetersPerSecond + " state.angle: " + state.angle.getDegrees());
         //System.out.println("Module Number: " + angleEncoder.getChannel() + " driveOutput: " + driveOutput + " angleOutput: " + angleOutput);

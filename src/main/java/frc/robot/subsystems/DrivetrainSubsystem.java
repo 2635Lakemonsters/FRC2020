@@ -20,6 +20,7 @@ import frc.robot.Constants;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.SPI;
 
@@ -45,7 +46,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
   SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, getAngle());
  
   AHRS navX;
-
   public DrivetrainSubsystem() {
     navX = new AHRS(SPI.Port.kMXP);
     if (navX != null) {
@@ -64,7 +64,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
       System.out.println("navX is null");
       return new Rotation2d(0,0);
     }
-
   }
   
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
@@ -77,6 +76,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getAngle())
         : new ChassisSpeeds(xSpeed, ySpeed, rot)
     );
+    
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.SWERVE_MAX_VELOCITY);
 
     frontLeftModule.setDesiredState(swerveModuleStates[0]);
