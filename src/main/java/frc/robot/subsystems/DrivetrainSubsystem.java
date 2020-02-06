@@ -76,7 +76,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, getAngle())
         : new ChassisSpeeds(xSpeed, ySpeed, rot)
     );
-    
+
     SwerveDriveKinematics.normalizeWheelSpeeds(swerveModuleStates, Constants.SWERVE_MAX_VELOCITY);
 
     frontLeftModule.setDesiredState(swerveModuleStates[0]);

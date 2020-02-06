@@ -51,7 +51,7 @@ public class SwerveModule {
         angleEncoder = new AnalogInput(angleEncoderChannel);
       
         this.angleOffset = angleOffset;
-        
+
         anglePIDController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
@@ -73,11 +73,19 @@ public class SwerveModule {
         double setSpeed = state.speedMetersPerSecond;
         double setAngle = state.angle.getDegrees();
 
+        if(Math.abs(setAngle - getAdjustedAngleEncoder()) > 90) {
+          if(setAngle > 0) {
+            setAngle = -(180 - setAngle);
+          } else {
+            setAngle = (180 + setAngle);
+          }
+          setSpeed = - setSpeed;
+        }
 
 
 
-
-        double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity() * Constants.RPM_TO_MPS, state.speedMetersPerSecond);
+        double driveOutput = drivePIDController.calculate(driveEncoder.getVelocity() * Constants.RPM_TO_MPS, setSpeed);
+        //System.out.println("DriveOutput: " + driveOutput);
         double angleOutput = anglePIDController.calculate(Math.toRadians(getAdjustedAngleEncoder()), Math.toRadians(setAngle));
 
         // if(angleEncoder.getChannel() == 0) {
@@ -97,6 +105,6 @@ public class SwerveModule {
         
         
         driveMotor.set(driveOutput);
-        angleMotor.set(angleOutput);
+        angleMotor.set(0.5 * angleOutput);
     }
 }

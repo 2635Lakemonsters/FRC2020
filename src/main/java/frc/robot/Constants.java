@@ -19,9 +19,9 @@ public final class Constants {
     public static final double TRACKWIDTH = 21.0;
     public static final double WHEELBASE = 25.0;
 
-    public static final double SWERVE_MAX_VELOCITY = 5.0;
-    public static final double SWERVE_MAX_ANGULAR_VELOCITY = 2 *Math.PI;
-    public static final double SWERVE_MAX_ANGULAR_ACCELERATION = 4 * Math.PI;
+    public static final double SWERVE_MAX_VELOCITY = 10.0;
+    public static final double SWERVE_MAX_ANGULAR_VELOCITY = 6*Math.PI;
+    public static final double SWERVE_MAX_ANGULAR_ACCELERATION = 16 * Math.PI;
 
     public static final double DEFAULT_DRIVE_ROTATIONS_PER_UNIT = (1.0 / (4.0 * Math.PI)) * (60.0 / 15.0) * (18.0 / 26.0) * (42.0 / 14.0);
     public static final double RPM_TO_MPS = ((11.9/3.281)/(5676 / 60))/60;
