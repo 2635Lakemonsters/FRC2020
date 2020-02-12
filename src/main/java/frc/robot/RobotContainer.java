@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -23,11 +24,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   final Joystick leftStick = new Joystick(0);
   final Joystick rightStick = new Joystick(1);
-
+  private JoystickButton zeroButton = new JoystickButton(leftStick, 8);
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  private final ZeroFieldOrientedCommand zeroCommand = new ZeroFieldOrientedCommand(drivetrainSubsystem);
+  
   public static DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
   public final DriveCommand driveCommand = new DriveCommand(leftStick, rightStick, drivetrainSubsystem);
   public final DriveTest driveTest = new DriveTest(drivetrainSubsystem);
@@ -50,6 +52,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    zeroButton.whenPressed(zeroCommand);
     //driveCommand.schedule(false);
   }
 

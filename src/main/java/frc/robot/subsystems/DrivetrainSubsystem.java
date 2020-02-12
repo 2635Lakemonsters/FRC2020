@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.model.NavX;
 import frc.model.SwerveModule;
 import frc.robot.Constants;
 
@@ -45,15 +46,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, getAngle());
  
-  AHRS navX;
+  NavX navX;
   public DrivetrainSubsystem() {
-    navX = new AHRS(SPI.Port.kMXP);
+    //navX = new AHRS(SPI.Port.kMXP);
+    navX = new NavX(SPI.Port.kMXP);
     if (navX != null) {
       System.out.println("resetting navX");
       navX.reset();
     }
      
   }
+
+  public NavX getGyroscope() {
+    return navX;
+}
   
   public Rotation2d getAngle() {
     if (navX != null) {
