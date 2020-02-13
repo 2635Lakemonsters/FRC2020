@@ -1,14 +1,13 @@
 package frc.model;
 
-
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 
-import frc.math.Rotation2;
 
 public final class NavX {
     private final AHRS navX;
-    private Rotation2 adjustmentAngle = Rotation2.ZERO;
+    private Rotation2d adjustmentAngle = new Rotation2d(0,0);
 	private boolean inverted;
 
 
@@ -25,20 +24,22 @@ public final class NavX {
         navX.reset();
     }
 
-    public double getAngle(){
-        return navX.getAngle();
-    }
+    public final Rotation2d getAngle() {
+        Rotation2d angle = getUnadjustedAngle().rotateBy(new Rotation2d(adjustmentAngle.getCos(), -adjustmentAngle.getSin()));
+        
+		return angle;
+	}
 
-	public final Rotation2 getAdjustmentAngle() {
+	public final Rotation2d getAdjustmentAngle() {
 		return adjustmentAngle;
 	}
 
-	public void setAdjustmentAngle(Rotation2 adjustmentAngle) {
+	public void setAdjustmentAngle(Rotation2d adjustmentAngle) {
 		this.adjustmentAngle = adjustmentAngle;
 	}
 
-    public Rotation2 getUnadjustedAngle() {
-        return Rotation2.fromRadians(getAxis(Axis.YAW));
+    public Rotation2d getUnadjustedAngle() {
+        return new Rotation2d(getAxis(Axis.YAW));
     }
 
     public double getUnadjustedRate() {

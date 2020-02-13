@@ -46,15 +46,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   SwerveDriveOdometry odometry = new SwerveDriveOdometry(kinematics, getAngle());
  
-  NavX navX;
+  private NavX navX;
+
   public DrivetrainSubsystem() {
     //navX = new AHRS(SPI.Port.kMXP);
     navX = new NavX(SPI.Port.kMXP);
     if (navX != null) {
       System.out.println("resetting navX");
       navX.reset();
-    }
-     
+    }  
   }
 
   public NavX getGyroscope() {
@@ -64,8 +64,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
   public Rotation2d getAngle() {
     if (navX != null) {
       //System.out.println(navX.getAngle());
-      SmartDashboard.putNumber("navX Angle: ", navX.getAngle());
-      return Rotation2d.fromDegrees(navX.getAngle());
+      return navX.getAngle();
     } else {
       System.out.println("navX is null");
       return new Rotation2d(0,0);
@@ -109,7 +108,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This method will be called once per scheduler runc  
     updateOdometry();
   }
 }

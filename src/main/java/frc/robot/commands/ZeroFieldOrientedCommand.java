@@ -16,7 +16,6 @@ public class ZeroFieldOrientedCommand extends CommandBase {
     public void initialize() {
         //drivetrain.g
         //drivetrain.getGyroscope().getu
-
         drivetrain.getGyroscope().setAdjustmentAngle(drivetrain.getGyroscope().getUnadjustedAngle());
     }
 
